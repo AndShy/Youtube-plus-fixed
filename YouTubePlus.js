@@ -1,5 +1,5 @@
 // ==UserScript==
-// @version         1.9.6 (v0.4_andshy_edition)
+// @version         1.9.6 (v0.5_AndShy_edition)
 // @name            YouTube +
 // @namespace       https://github.com/ParticleCore
 // @description     YouTube with more freedom
@@ -20,7 +20,7 @@
 // ==/UserScript==
 (function () {
     "use strict";
-	var globalA, globalB, globaltemp, globalytkey;
+	var globalb;
     var particle = {
         inject: function(is_userscript) {
             function setLocale(content) {
@@ -244,7 +244,7 @@
                         temp.content.querySelector(".P-implang").dataset.p = "GLB_LOCL_LANG_CSTM";
                     }
                 } else if (section === "VID") {
-                    temp.innerHTML = //
+                    temp.innerHTML =
                         "<div id='P-content'>" +
                             "<div class='P-header'>" +
                                 "<button class='P-save'    data-p='tnd|GLB_SVE'></button>" +
@@ -591,14 +591,7 @@
                     modArgs(b);
 					globalb = b;
                     temp = original.apply(this, arguments);
-                    /*player = document.getElementById("movie_player");
-                    if (player) {
-                        if (!user_settings.VID_PLR_ATPL) {
-                            player.cueVideoByPlayerVars(b.args);
-                        }
-                        player.setPlaybackQuality(user_settings.VID_DFLT_QLTY);
-                        player.setPlaybackQualityRange(user_settings.VID_DFLT_QLTY);
-                    }*/
+                    modPlay();
                     return temp;
                 };
             }
@@ -693,18 +686,7 @@
 
 
                     if (event.target.getAttribute("name") === "www/watch") {
-
-						player = document.getElementById("movie_player");
-						if (player) {
-							if (!user_settings.VID_PLR_ATPL) {
-								if (!((document.querySelector('#watch-appbar-playlist') !== null) && (user_settings.plApl == true))) {
-									player.cueVideoByPlayerVars(globalb.args);
-								}
-							}
-						player.setPlaybackQuality(user_settings.VID_DFLT_QLTY);
-						player.setPlaybackQualityRange(user_settings.VID_DFLT_QLTY);
-						}
-
+						modPlay();
                         window.yt.www.watch.player.seekTo = modSeekTo(window.yt.www.watch.player.seekTo);
                     }
 
@@ -739,6 +721,19 @@
                     }
                 }
             }
+			function modPlay(){
+				var player;
+				player = document.getElementById("movie_player");
+				if (player) {
+					if (!user_settings.VID_PLR_ATPL) {
+						if (!((document.querySelector('#watch-appbar-playlist') !== null) && (user_settings.plApl == true))) {
+							player.cueVideoByPlayerVars(globalb.args);
+						}
+					}
+					player.setPlaybackQuality(user_settings.VID_DFLT_QLTY);
+					player.setPlaybackQualityRange(user_settings.VID_DFLT_QLTY);
+				}
+			}
             function checkBounds(elm, X, Y) {
                 var snapX, snapY;
                 if (X > -1 && X + elm.offsetWidth < document.documentElement.offsetWidth) {
@@ -2001,9 +1996,9 @@
                 var logo, checkbox, autoplaybar, description, livechat;
                 autoplaybar = document.querySelector(".autoplay-bar");
                 description = document.getElementById("action-panel-details");
-				
+
 				livechat = document.querySelector(".yt-uix-expander" + ".live-chat-expander")
-				
+
                 if (user_settings.GEN_YT_LOGO_LINK && window.yt && window.yt.config_ && window.yt.config_.LOGGED_IN) {
                     logo = document.querySelector("map[name='doodle'] > area, a#logo-container");
                     if (logo && logo.href === window.location.origin + "/") {
